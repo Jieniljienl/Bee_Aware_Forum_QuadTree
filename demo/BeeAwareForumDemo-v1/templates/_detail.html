@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block block1 %}
+
+    <div>
+        <h5><a href="javascript:;" onclick="javascript:history.go(-1);" style="text-decoration: none; color: black; float: left; line-height: 50px;"><- Return</a></h5>
+    </div>
+    </br>
+    <hr>
+    <div>
+        <div>
+            <h5><b>Post ID: {{ post.id }}</b></h5>
+            <h5><b>Post Title: {{ post.title }}</b></h5>
+            <h5>Date: {{ post.postDate }}</h5>
+            <h5>Time: {{ post.postTime }}</h5>
+            <p>Text: {{ post.text }}</p>
+        </div>
+        <div class="col-lg-4">
+            <img src={{ post.img_src }} alt="img loading failure" style="display: inline-block;height: auto;max-width: 100%;">
+        </div>
+    </div>
+
+{% endblock block1 %}

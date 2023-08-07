@@ -1,0 +1,183 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Bee forum homepage</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        .fakeimg {
+            height: 200px;
+            background: #aaa;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="#">Bee Aware Forum</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="{{ url_for('qa.index') }}">Homepage</a></li>
+                <li><a href="{{ url_for('qa.public_my_post') }}">My post</a></li>
+                <li><a href="{{ url_for('qa.save') }}">My save</a></li>
+                <li><a href="{{ url_for('qa.public_qa') }}">post</a></li>
+            </ul>
+
+
+            <button type="button" class="btn btn-primary me-2"
+                    style="float:right;background-color:firebrick;color: white;"><a href="{{ url_for('auth.login') }}">Log
+                in</a></button>
+            <button type="button" class="btn btn-success"
+                    style="float:right;background-color: darkgoldenrod;color: white;"><a
+                    href="{{ url_for('auth.register') }}">Register</a></button>
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle"
+                        style="float:right; background-color: black; color: gray;" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    My Account <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="{{ url_for('qa.history') }}">History</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="{{ url_for('qa.profile') }}">User account</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+    </form>
+</nav>
+<div style="text-align: center ;">
+    <h1><b>Bee Forum</b></h1>
+</div>
+<br>
+<br>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <form method="POST" action="{{ url_for('qa.index') }}">
+                <h2>Hot post</h2>
+                <button type="submit" name="functionality" value="likes" autofocus>Likes</button>
+                <button type="submit" name="functionality" value="view">View</button>
+                <ul>
+                    <!--显示点赞前三的hot post-->
+                    {% for question in hot_posts[:3] %}
+                        <!--显示设定时间内的hot post-->
+                        <li><h3>#{{ question.title }}:</h3></li>
+                        <h3>likes:{{ question.NumOfLikes }}/view:{{ question.NumOfView }}</h3>
+                    {% endfor %}
+                </ul>
+            </form>
+            <hr class="hidden-sm hidden-md hidden-lg">
+
+        </div>
+
+
+        <div class="dropdown" style='float: right;font-size: larger;'>
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="true">
+                category
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                <li class="active"><a href="#">000</a></li>
+                <li><a href="#">111</a></li>
+                <li><a href="#">222</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">Other</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-8">
+            <br>
+            <br>
+
+            <ul class="question-ul">
+                {% for question in questions %}
+                    <li>
+                        <table width="100%" border="0%">
+                            <td colspan="0" style="background-color:ghostwhite;">
+                                <h1>{{ question.title }}</h1>
+                                <a href="{{ url_for('qa.qa_like', qa_id=question.id) }}" style="float: right">Like</a>
+                                <br>
+                                <a href="{{ url_for('qa.qa_dislike', qa_id=question.id) }}"
+                                   style="float: right">Dislike</a>
+                                <h3>{{ question.content }}</h3>
+                                <br>
+                                <div>
+                                    <!--<img src="b.jpg" alt="head portrait"width="80%" height="100%">-->
+                                    <p style="font-size: larger">Author:{{ question.author.username }}</p>
+                                    <p style="font-size: larger">Date:{{ question.create_Time }}</p>
+                                    <p style="font-size: larger">view: {{ question.NumOfView }}</p>
+                                    <p style="font-size:larger">likes: {{ question.NumOfLikes }}</p>
+                                    <br>
+                                    <p><a onclick="confirmSave()"
+                                          href="{{ url_for('qa.qa_clicksave', qa_id=question.id) }}"
+                                          class="btn btn-primary btn-lg" role="button" style="float:right;">Save</a></p>
+                                    <br>
+
+                                    <script>
+                                        function confirmSave() {
+                                            var result = confirm("Save the post");
+                                            if (result) {
+                                            }
+                                        }
+                                    </script>
+                                    <br>
+                                    <p><a class="btn btn-primary btn-lg"
+                                          href="{{ url_for('qa.qa_detail', qa_id=question.id) }}" role="button"
+                                          style="float:right;">Learn more about it</a></p>
+                                    <br>
+                                    <br>
+                                </div>
+                            </td>
+
+                        </table>
+                    </li>
+                    <br>
+                    <br>
+                {% endfor %}
+
+            </ul>
+
+
+        </div>
+
+
+        <div class="jumbotron text-center" style="margin-bottom:0">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li>
+                        <a href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                    <li>
+                        <a href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+</body>
+</html>

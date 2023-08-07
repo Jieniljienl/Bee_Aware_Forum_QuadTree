@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Bee Aware Forum</title>
+	</head>
+    <body>
+        <div>
+            <a href="#">
+                <h1><b>Bee Aware Forum</b></h1>
+            </a>
+           <div>
+                <ul>
+                    <li><a href="http://127.0.0.1:5000/index">Home page</a></li>
+                    <li><a href="http://127.0.0.1:5000/login">Create a Post</a></li>
+                    <li><a href="http://127.0.0.1:5000/login">Log in</a></li>
+                </ul>
+                
+            </div>
+            <div>
+                <ul>
+                  <li><p><b>Welcome to register</b></p></li>
+                </ul>
+            </div>
+        </div>
+        <hr />
+        <div>
+            <form action="http://127.0.0.1:5000//register" method="POST">
+                <div class="input-group mb-3">
+                    <span><b>Your name</b></span>
+                    <input type="text" name="username">
+                </div>
+                <div class="input-group mb-3">
+                    <span>ID (auto-increment)</span>
+                    <!-- <input type="text" name="id"> -->
+                </div>
+                <div class="input-group mb-3">
+                    <span>E-mail</span>
+                    <input type="email" name="email">
+                </div>
+                <div class="input-group mb-3">
+                    <span>Password</span>
+                    <input type="password" name="password">
+                </div>
+                <div class="input-group mb-3">
+                    <span>Confirm password</span>
+                    <input type="password" name="password2">
+                </div>
+                <div class="input-group mb-3">
+                    <span>Contact number</span>
+                    <input type="number" name="contact_num">
+                </div>
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            {{ message }} <br>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Confirm</button>
+            </form>
+            </div>
+	</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>My post</title>
+	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<style>
+    .fakeimg {
+        height: 200px;
+         background: #aaa;
+    }
+  </style>
+</head>
+<body>
+<script>
+ function confirmChange() {
+    var result = confirm("Save the change");
+    if (result) {
+    }
+  }
+</script>
+	<nav class="navbar navbar-inverse">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+
+	      <a class="navbar-brand" href="#">Bee Aware Forum</a>
+	    </div>
+	    <div class="collapse navbar-collapse" id="myNavbar">
+	      <ul class="nav navbar-nav">
+	       <li class="active"><a href="{{ url_for('qa.index') }}">Homepage</a></li>
+                <li><a href="{{ url_for('qa.public_my_post') }}">My post</a></li>
+              <li><a href="{{ url_for('qa.save') }}">My save</a></li>
+                <li><a href="{{ url_for('qa.public_qa') }}">post</a></li>
+			  </ul>
+
+
+
+		  	<button type="button" class="btn btn-primary me-2" style="float:right;background-color:firebrick;color: white;"><a href="{{ url_for('auth.login') }}">Log in</a></button>
+		  	<button type="button" class="btn btn-success"style="float:right;background-color: darkgoldenrod;color: white;"><a href="{{ url_for('auth.register') }}">Register</a></button>
+		    <div class="btn-group" >
+		    <button type="button" class="btn btn-default dropdown-toggle" style="float:right; background-color: black; color: gray;"data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		      My Account <span class="caret"></span></button>
+		      <ul class="dropdown-menu">
+		      <li><a href="{{ url_for('qa.history')}}">History</a></li>
+			  <li role="separator" class="divider"></li>
+			  <li><a href="{{ url_for('qa.profile')}}">User account</a></li>
+		    </ul>
+		  </div>
+	    </div>
+	  </div>
+
+	  <form class="navbar-form navbar-left" role="search" >
+	    <div class="form-group" >
+	      <input type="text" class="form-control" placeholder="Search">
+	    </div>
+	    <button type="submit" class="btn btn-default">Submit</button>
+	  </form>
+	</nav>
+	<div style="text-align: center ;">
+	<h1><b>Profile</b></h1>
+	</div>
+	<br>
+	<br>
+	<div class="container">
+    <div class="panel panel-default">
+            <div class="panel-body">
+<div class="row" style="margin-left: 100px;">
+        <h1>User information</h1>
+    <form action="{{ url_for('qa.profile') }}" method="POST">
+        <label for="username">Name:</label>
+        <input type="text" name="username" value="{{ user.username }}" required style="margin-left: 50px;">
+        <button type="submit" name="update_username" onclick="confirmChange()">modify</button><br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" name="email" value="{{ user.email }}" required style="margin-left: 50px;">
+        <button type="submit" name="update_email" onclick="confirmChange()">modify</button><br><br>
+
+        <label for="address">Address:</label>
+        <input type="text" name="address" value="{{ user.address }}" required style="margin-left: 31px;">
+        <button type="submit" name="update_address" onclick="confirmChange()">modify</button><br><br>
+
+        <label for="birthday">Birthday:</label>
+        <input type="date" name="birthday" value="{{ user.birthday }}" required style="margin-left: 31px;">
+        <button type="submit" name="update_birthday" onclick="confirmChange()">modify</button><br><br>
+
+        <label for="introduction">introduction:</label>
+        <input type="text" name="introduction" value="{{ user.introduction }}" required style="margin-left: 10px;">
+        <button type="submit" name="update_introduction" onclick="confirmChange()">modify</button><br><br>
+
+    </form>
+        </div>
+            </div>
+    </div>
+        <br>
+        <br>
+
+ </div>
+        </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
