@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{{ question.title }}</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        .imgs {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        li .imgs {
+            display: block;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const commentLinks = document.querySelectorAll(".comment-link");
+            const commentInput = document.getElementById("comment-input");
+            const replyToIdInput = document.getElementById("answer-to-id");
+            commentLinks.forEach(commentLink => {
+                commentLink.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    const replyInfo = commentLink.getAttribute("data-reply-info");
+                    commentInput.value = ''; // Clear the input field
+                    commentInput.placeholder = replyInfo; // Set the placeholder to the reply info
+                    const replyToId = commentLink.getAttribute("data-answer-to-id");
+                    replyToIdInput.value = replyToId;
+                    commentInput.focus();
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="container-fluid">
+    <a class="navbar-brand" style="color: black" href="#">
+        <div class="imgs" style="display: inline-block; margin-right: 5px; margin-top: -5px;"><img src="/static/u0.png"
+                                                                                                   alt="bee" width="45"
+                                                                                                   height="40"></div>
+        Bee Aware Forum</a>
+    <div class="collapse navbar-collapse" id="myNavbar" style="position: absolute; top: 30px; right: 260px;">
+        <ul class="nav navbar-nav">
+            <li><div class="imgs"><a href="{{ url_for('qa.index') }}"><img src="/static/u146.svg" width="50"
+                                                                           height="50"></a></div>
+                <a href="{{ url_for('qa.index') }}">Home</a>
+            </li>
+            <li>
+                <div class="imgs"><a href="{{ url_for('qa.public_my_post') }}"><img src="/static/u147.svg"></a></div>
+                <a href="{{ url_for('qa.public_my_post') }}">My post</a>
+            </li>
+            <li>
+                <div class="imgs"><a href="{{ url_for('qa.save') }}"><img src="/static/u148.svg"></a></div>
+                <a href="{{ url_for('qa.save') }}">Save</a>
+            </li>
+
+            <li>
+                <div class="imgs"><a href="{{ url_for('qa.history') }}"><img src="/static/u149.svg"></a></div>
+                <a href="{{ url_for('qa.history') }}">History</a>
+            </li>
+            <li>
+                <div class="imgs"><a href="{{ url_for('qa.public_qa') }}"><img src="/static/u151.png"></a></div>
+                <a href="{{ url_for('qa.public_qa') }}">Post</a>
+            </li>
+            <li>
+                <div class="imgs"><a href="{{ url_for('qa.profile') }}"><img src="/static/u150.svg"></a></div>
+                <a href="{{ url_for('qa.profile') }}">User</a>
+            </li>
+
+
+        </ul>
+    </div>
+</div>
+
+
+<br>
+<br>
+<br>
+<br>
+
+<div class="col-sm-4" style="float: right; margin-right: 40px">
+            <form method="POST">
+                <h2>Hot post</h2>
+                <ul>
+                    <!--显示点赞前三的hot post-->
+                    {% for question in hot_posts[:3] %}
+                        <!--显示设定时间内的hot post-->
+                        <li><h3><a href="{{ url_for('qa.qa_detail', qa_id=question.id) }}">#{{ question.title }}:</a>
+                        </h3>
+                        </li>
+                        <h3>likes:{{ question.NumOfLikes }}/view:{{ question.NumOfView }}</h3>
+                    {% endfor %}
+                </ul>
+            </form>
+
+            <br>
+            <form method="POST">
+                <h2>History</h2>
+                <ul>
+                    {% for history in histories[:3] %}
+                        <li><h3>{% if author %}
+                            <a href="{{ url_for('qa.qa_detail', qa_id=history.question.id) }}">#{{ history.question.title }}</a>{% endif %}
+                        </h3></li>
+                    {% endfor %}
+                </ul>
+            </form>
+            <br>
+            <form method="POST">
+                <h2>Saves</h2>
+                <ul>
+                    {% for save in saves[:3] %}
+                        <li><h3>{% if author %}
+                            <a href="{{ url_for('qa.qa_detail', qa_id=save.question.id) }}">#{{ save.question.title }}</a>{% endif %}
+                        </h3></li>
+                    {% endfor %}
+                </ul>
+            </form>
+            <hr class="hidden-sm hidden-md hidden-lg">
+        </div>
+
+<div class="container">
+    {#    <div class="panel panel-default">#}
+    {#        <div class="panel-body">#}
+    <div class="row" style="margin-left: -100px;">
+        <div class="panel panel-default" style="width: 799px; ">
+            <div style="float: left; margin-left: 10px; margin-top: 10px;">
+                <a href="{{ url_for('qa.qa_like_in_detail', qa_id=question.id) }}"
+                   style=" margin-bottom: 0px; vertical-align: middle;">
+                    <img src="/static/ulike.svg" alt="Like"/>
+                </a>
+                <p style="font-size:larger; margin-bottom: 0px; margin-left: 4px; vertical-align: middle;">{{ question.NumOfLikes }}</p>
+                <a href="{{ url_for('qa.qa_dislike_in_detail', qa_id=question.id) }}"
+                   style="vertical-align: middle;">
+                    <img src="/static/udislike.svg" alt="Dislike"/>
+                </a>
+            </div>
+            <h1 style="margin-left: 50px; font-weight: bold">{{ question.title }}</h1>
+            <div style="margin-left: 53px; margin-bottom: -28px">
+    {% if question.author.id==g.user.id %}
+          <a href="{{ url_for('qa.profile', user_id=question.author.id) }}">
+    <h4 style="margin-bottom: 0px">Posted by: {{ question.author.username }}</h4>
+</a>
+                {% else %}
+               <a href="{{ url_for('qa.other_profile', user_id=question.author.id) }}">
+    <h4 style="margin-bottom: 0px">Posted by: {{ question.author.username }}</h4>
+</a>
+{% endif %}
+
+                {#                    <img src="{{ url_for('static', filename='src/' + question.author.image_filename) }}" alt="Image"#}
+                {#                         style="margin-left: 15px; width: 50px; height: 50px">author:{{ question.author.username }}#}
+                <img src="/static/time.png" style="height: 20px; width: 20px; margin-left: 200px; margin-top: -40px "
+                     alt="time"/><h4 style="margin-left: 230px; margin-top: -40px">{{ question.create_Time }}</h4>
+
+                {#            <h4 style="margin-left: 230px; margin-top: -19px">{{ question.create_Time }}</h4>#}
+
+                <img src="/static/viewed.png" style="height: 23px; width: 23px; margin-left: 450px; margin-top: -60px "
+                     alt="view"/><h4 style="margin-left: 480px; margin-top: -50px">{{ question.NumOfLikes }} views</h4>
+                {#            <h4 style="margin-left: 480px; margin-top: -51px">{{ question.NumOfLikes }} views</h4>#}
+            </div>
+            <br>
+            <br>
+            <div class="postimgs">
+                {% if question.image_filename %}
+
+                        <img src="{{ url_for('static', filename='src/' + question.image_filename) }}"
+                             alt="Image" style="margin-left: 50px; width: 35%; height: 70%">
+
+                {% else %}
+                    <img src="/static/u44.svg" alt="head portrait"
+                         style="margin-left: 15px; width: 70%; height: 100%">
+                {% endif %}
+                <h3 style="font-size: large; margin-left: 50px; width: 70%; height: 100%;">{{ question.content }}</h3>
+            </div>
+            <br>
+            <br>
+
+            <!--标签-->
+            {% if question.tag %}
+                <div style=" margin-left: 50px;">
+                    <p class="btn btn-primary btn-lg">{{ question.tag }}</p>
+
+                </div>
+            {% else %}
+                <br>
+            {% endif %}
+            <br>
+        </div>
+
+{#                <h1>Comment area: </h1>#}
+
+<form>
+    <div style="float: left;">
+        <form>
+    <div style="float: left;">
+     {# Initialize total_indent variable #}
+        {% macro display_answer(answer, indent=0,indent1=0) %}
+            {# Calculate total_indent based on indent #}
+            <div style="margin-left: {{ indent}}px; width: 699px; border: none;">
+
+                <h4>
+                    {% if answer.author.id==g.user.id %}
+                    <a href="{{ url_for('qa.profile', user_id=answer.author.id) }}"><img src="{{ url_for('static', filename='src/' + answer.author.image_filename) }}"
+                         alt="Image" style="margin-left: 0px; width: 50px; height: 50px"></a>
+                    {% else %}
+                    <a href="{{ url_for('qa.other_profile', user_id=answer.author.id) }}"><img src="{{ url_for('static', filename='src/' + answer.author.image_filename) }}"
+                         alt="Image" style="margin-left: 0px; width: 50px; height: 50px"></a>
+                    {% endif %}
+                    &nbsp  {{ answer.author.username }}  &nbsp&nbsp{{answer.author.level }}level &nbsp
+                </h4>
+
+                <p style="margin-left: 54px">
+                    {% if answer.reply_info %}
+                        <span class="comment-reply-info">to {{ answer.last_to_user }}: </span>
+                    {% endif %}
+                    <a href="#" class="comment-link" data-answer-to-id="{{ answer.id }}"
+                       data-reply-info="to {{ answer.author.username }}">{{ answer.content }}</a>
+                </p>
+                <p style="margin-left: 54px">
+                    <a href="{{ url_for('qa.answer_like', qa_id=answer.id) }}"
+                       style="float: left"><img src="/static/leftarrow.svg" style="height: 10px; height: 10px" alt="leftarrow"/>
+                    </a>
+                    <span style="float: left">&nbsp {{ answer.NumOfLikes }} &nbsp</span>
+                    <a href="{{ url_for('qa.answer_dislike', qa_id=answer.id) }}"
+                       style="float: left"><img src="/static/rightarrow.svg" style="height: 10px; height: 10px" alt="rightarrow"/>
+                    </a>
+
+                    <a href="#" class="comment-link" data-answer-to-id="{{ answer.id }}"
+                       data-reply-info="to {{ answer.author.username }}"> &nbsp <img src="/static/reply.svg" style="height: 10px; height: 10px" alt="reply"/> &nbsp
+                    </a>
+                    &nbsp {{ answer.create_Time }}<br>
+                <br>
+        <hr>
+                </p>
+
+                {% set sub_answer_displayed = false %}
+        {% for sub_answer in question.answers %}
+         {% if sub_answer.answer_to_id == answer.id and not sub_answer_displayed and sub_answer.answer_to_id is defined%}
+            {% if indent1 < 3 %}
+                {{ display_answer(sub_answer, indent=indent+ 70  ,indent1=indent1 + 1) }}
+            {% else %}
+                {{ display_answer(sub_answer, indent=0,indent1=4) }}
+            {% endif %}
+            {% set sub_answer_displayed = true %}
+        {% endif %}
+    {% endfor %}
+</div>
+
+
+        {% endmacro %}
+
+        {% for answer in question.answers %}
+            {% if answer.answer_to_id is none %}
+                {{ display_answer(answer) }}
+            {% endif %}
+        {% endfor %}
+    </div>
+</form>
+    <div  style="height: 190px; width: 801px">
+    <div >
+
+        <form action="{{ url_for("qa.public_answer") }}" method="post">
+            <div class="form-group">
+                <input type="text" name="content" id="comment-input" class="form-control"
+                       placeholder="Enter what you want to comment on"
+                       style="width: 800px; height: 150px; margin-left: -15px; margin-top: -20px">
+                <input type="hidden" name="question_id" value="{{ question.id }}">
+                <input type="hidden" name="answer_to_id" id="answer-to-id">
+            </div>
+            <button type="submit" class="btn btn-default" style="margin-left: 700px; margin-top: -10px;">Submit</button>
+        </form>
+    </div>
+</div>
+
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+    </ul>
+</nav>
+</body>
+</html>

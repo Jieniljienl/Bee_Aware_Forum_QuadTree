@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Bee forum homepage</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        .imgs {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        li .imgs {
+            display: block;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .custom-navbar-form {
+            margin-left: 200px;
+            margin-bottom: 50px;
+        }
+
+        .custom-navbar-form-2 {
+            margin-left: -700px;
+            margin-bottom: 50px;
+        }
+
+
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <a class="navbar-brand" style="color: black" href="#">
+        <div class="imgs" style="display: inline-block; margin-right: 5px; margin-top: -5px;"><img src="/static/u0.png"
+                                                                                                   alt="bee" width="45"
+                                                                                                   height="40"></div>
+        Bee Aware Forum</a>
+    <div class="collapse navbar-collapse" id="myNavbar" style="position: absolute; top: 30px; right: 260px;">
+        <ul class="nav navbar-nav">
+            <li>
+
+                <div class="imgs"><a href="{{ url_for('qa.index') }}"><img src="/static/u146.svg" width="50"
+                                                                           height="50"></a></div>
+                <a href="{{ url_for('qa.index') }}">Home</a>
+            </li>
+            <li>
+                <div class="imgs"><a href="{{ url_for('qa.public_my_post') }}"><img src="/static/u147.svg"></a></div>
+                <a href="{{ url_for('qa.public_my_post') }}">My post</a>
+            </li>
+            <li>
+                <div class="imgs"><a href="{{ url_for('qa.save') }}"><img src="/static/u148.svg"></a></div>
+                <a href="{{ url_for('qa.save') }}">Save</a>
+            </li>
+
+            <li>
+                <div class="imgs"><a href="{{ url_for('qa.history') }}"><img src="/static/u149.svg"></a></div>
+                <a href="{{ url_for('qa.history') }}">History</a>
+            </li>
+            <li>
+                <div class="imgs"><a href="{{ url_for('qa.public_qa') }}"><img src="/static/u151.png"></a></div>
+                <a href="{{ url_for('qa.public_qa') }}">Post</a>
+            </li>
+            <li>
+                <div class="imgs"><a href="{{ url_for('qa.profile') }}"><img src="/static/u150.svg"></a></div>
+                <a href="{{ url_for('qa.profile') }}">User</a>
+            </li>
+
+
+
+        </ul>
+    </div>
+</div>
+<div>
+    <form class="navbar-form navbar-left custom-navbar-form" role="search" method="GET"
+          action="{{ url_for('qa.searchinhome') }}">
+        <div class="form-group" style="position: relative;">
+            <img src="/static/search_icon.svg" alt="Search"
+                 style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; z-index: 1; pointer-events: none;">
+            <input type="text" class="form-control" placeholder="Search" name="q"
+                   style="width: 600px; height: 40px; padding-left: 30px;">
+        </div>
+        <button type="submit" class="btn btn-default" style="height: 40px; margin-left: 0px">Submit</button>
+    </form>
+    <br>
+    <br>
+    <br>
+    <div>
+        <form class="navbar-form navbar-left custom-navbar-form-2" role="search" method="GET"
+              action="{{ url_for('qa.searchintag') }}">
+            <div class="form-group" style="position: relative;">
+                <img src="/static/utag.svg" alt="Tag"
+                     style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; z-index: 1; pointer-events: none;">
+                <input type="text" class="form-control custom-input-length" placeholder="Honey bee races" name="t"
+                       style="width: 400px; height: 30px; padding-left: 30px;">
+            </div>
+            <button type="submit" class="btn btn-default" style="height: 30px;">Submit</button>
+        </form>
+    </div>
+     <br>
+    <br>
+    <br>
+    <div>
+    <form action="{{ url_for('qa.filter_by_date') }}" class="navbar-form navbar-left custom-navbar-form" role="search" method="GET">
+    <div class="form-group" style="position: relative;">
+        <label for="date">Filter by Date:</label>
+        <input type="date" id="date" name="date" style="width: 400px; height: 30px; padding-left: 30px; left: 5px;">
+        <button type="submit" id="submit-button" class="btn btn-default" style="height: 30px;">Submit</button>
+    </div>
+</form>
+
+<script>
+    // Get the date input element
+    var dateInput = document.getElementById('date');
+
+    // Check if the date input has a value (after form submission)
+    if (dateInput.value) {
+        // Set the min attribute to the selected date
+        dateInput.min = dateInput.value;
+    }
+
+    // Add an event listener to the input event
+    dateInput.addEventListener('input', function() {
+        // Remove the min attribute when the user selects a date
+        this.removeAttribute('min');
+    });
+</script>
+
+
+    </div>
+</div>
+<br>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-8" style="background-color:white;">
+            <br>
+
+            <ul class="question-ul">
+                {% for question in questions %}
+                    <li>
+                        <table width="100%" border="0%" style="border: 2px solid black;">
+                            <td colspan="0">
+                                <div style="font-size: larger; float: right;">
+                                    <p style="margin-top: 10px;margin-bottom: 5px;">Date: {{ question.create_Time }}</p>
+                                    <p>view: {{ question.NumOfView }}</p>
+                                </div>
+                                <div style="float: left; margin-left: 10px; margin-top: 10px;">
+                                    <a href="{{ url_for('qa.qa_like', qa_id=question.id) }}"
+                                       style=" margin-bottom: 0px; vertical-align: middle;">
+                                        <img src="/static/ulike.svg" alt="Like"/>
+                                    </a>
+                                    <p style="font-size:larger; margin-bottom: 0px; margin-left: 4px; vertical-align: middle;">{{ question.NumOfLikes }}</p>
+                                    <a href="{{ url_for('qa.qa_dislike', qa_id=question.id) }}"
+                                       style="vertical-align: middle;">
+                                        <img src="/static/udislike.svg" alt="Dislike"/>
+                                    </a>
+                                </div>
+                                <h1 style="margin-left: 50px; font-weight: bold">{{ question.title }}</h1>
+                                <!-- 插入图片-->
+                                <div class="postimgs">
+                                    {% if question.image_filename %}
+    <a href="{{ url_for('qa.qa_detail', qa_id=question.id) }}"> <img src="{{ url_for('static', filename='src/' + question.image_filename) }}" alt="Image" style="margin-left: 15px; width: 70%; height: 100%"></a>
+{% else %}
+     <a href="{{ url_for('qa.qa_detail', qa_id=question.id) }}">  <img src="/static/u44.svg" alt="head portrait" style="margin-left: 15px; width: 70%; height: 100%"></a>
+{% endif %}
+
+                                </div>
+                                <h3 style="font-size: large; margin-left: 50px; width: 70%; height: 100%; text-decoration: underline;">{{ question.content }}</h3>
+                                <br>
+
+                                <!--标签-->
+                                 {% if question.tag %}
+                                <div style=" margin-left: 50px;">
+                                    <p class="btn btn-primary btn-lg">{{ question.tag }}</p>
+
+                                </div>
+                            {% else %}
+                            <br>
+                            {%endif%}
+                                <br>
+                                <div style="border: 1px solid black;">
+                                    <!--<p style="font-size: larger">Author:{{ question.author.username }}</p>-->
+
+
+                                    <div style="float:left; margin-left: 20px;">
+                                        <!-- 插入comments的图标 -->
+                                        <a href="{{ url_for('qa.qa_detail', qa_id=question.id) }}"
+                                           style="float:left; margin-right: 20px;">
+                                            <img src="/static/ucomments.svg" alt="Comments Icon"
+                                                 style="vertical-align: middle; margin-right: 5px;">
+                                            <p style="font-size: large; display: inline-block;">Comments</p>
+                                        </a>
+
+                                        <!-- 插入save的图标 -->
+                                        <a onclick="confirmSave()"
+                                           href="{{ url_for('qa.qa_clicksave', qa_id=question.id) }}"
+                                           style="float:left; margin-left: 20px;">
+                                            <img src="/static/usave.svg" alt="Save Icon"
+                                                 style="vertical-align: middle; margin-right: 5px;">
+                                            <p style="font-size: large; display: inline-block;">Save</p>
+                                        </a>
+                                    </div>
+
+
+                                    <script>
+                                        function confirmSave() {
+                                            var result = confirm("Save the post");
+                                            if (result) {
+                                            }
+                                        }
+                                    </script>
+                                </div>
+                            </td>
+
+                        </table>
+                    </li>
+                    <br>
+                    <br>
+                {% endfor %}
+
+            </ul>
+            <div class="jumbotron text-center" style="margin-bottom:0; background-color:white;">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+
+                        <!--!-->
+                        {% if questions.has_prev %}
+                            <li>
+                                <a href="{{ url_for('qa.index', page=questions.prev_num) }}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+
+                        {% for page_num in questions.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                            {% if page_num %}
+                                {% if questions.page == page_num %}
+                                    <li class="active"><span>{{ page_num }}</span></li>
+                                {% else %}
+                                    <li><a href="{{ url_for('qa.index', page=page_num) }}">{{ page_num }}</a></li>
+                                {% endif %}
+                            {% else %}
+                                <li class="disabled"><span>...</span></li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if questions.has_next %}
+                            <li>
+
+                                <a href="{{ url_for('qa.index', page=questions.next_num) }}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+
+                        <!--!-->
+                    </ul>
+                </nav>
+            </div>
+
+        </div>
+
+        <div class="col-sm-4">
+            <form method="POST" action="{{ url_for('qa.index') }}">
+                <div class="quick-review-container">
+                    <h2>Hot topic</h2>
+                </div>
+
+                <ul>
+
+                    {% for question in hot_posts[:3] %}
+                        <li><h3><a href="{{ url_for('qa.qa_detail', qa_id=question.id) }}">#{{ question.title }}:</a></h3></li>
+                        <h3>likes:{{ question.NumOfLikes }}/view:{{ question.NumOfView }}</h3>
+                    {% endfor %}
+                </ul>
+            </form>
+            <hr class="hidden-sm hidden-md hidden-lg">
+        </div>
+        <!--显示Quick review-->
+        <div class="col-sm-4">
+            <form method="POST" >
+
+                <div class="quick-review-container">
+                    <h2>History</h2>
+                </div>
+                <ul>
+                         {% if not g.user  %}
+                        <br>
+                      <li>  </li>
+                      {% else %}
+                             <button type="button" onclick="window.location.href = '{{ url_for('qa.history') }}';" autofocus>more→</button>
+                               {% for history in histories[:3] %}
+                        <li><h3><a href="{{ url_for('qa.qa_detail', qa_id=history.question.id) }}">#{{history.question.title}}</a> </h3></li>
+                      {% endfor %}
+                         {% endif %}
+
+                </ul>
+            </form>
+            <hr class="hidden-sm hidden-md hidden-lg">
+        </div>
+        <div class="col-sm-4">
+            <form method="POST" >
+
+                <div class="quick-review-container">
+                    <h2>Saved</h2>
+
+                </div>
+
+                <ul>
+                    <!--显示最近三条保存-->
+                 {% if not g.user %}
+
+                         <br>
+                      <li>  </li>
+                      {% else %}
+                     <button type="button" onclick="window.location.href = '{{ url_for('qa.save') }}';" autofocus>more→</button>
+                     {% for save in saves[:3] %}
+                        <li><h3><a href="{{ url_for('qa.qa_detail', qa_id=save.question.id) }}">#{{save.question.title}}</a> </h3></li>
+                    {% endfor %}
+                {% endif %}
+                </ul>
+            </form>
+            <hr class="hidden-sm hidden-md hidden-lg">
+        </div>
+
+        <div class="col-sm-4">
+            <form method="POST">
+
+                <div class="quick-review-container">
+                    <h2>My Post</h2>
+
+                </div>
+
+                <ul>
+
+                    {% if not g.user  %}
+                        <br>
+                      <li>  </li>
+                      {% else %}
+                        <button type="button" onclick="window.location.href = '{{ url_for('qa.public_my_post') }}';" autofocus>more→</button>
+                         {% for my_post in my_posts[:3] %}
+                            <li><h3><a href="{{ url_for('qa.qa_detail', qa_id=my_post.id) }}">#{{ my_post.title }}:</a></h3></li>
+                    {% endfor %}
+                  {% endif %}
+                </ul>
+            </form>
+            <hr class="hidden-sm hidden-md hidden-lg">
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
